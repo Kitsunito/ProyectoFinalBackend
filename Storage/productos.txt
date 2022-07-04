@@ -1,1 +1,1 @@
-{"maxID":2,"data":[{"nombre":"Pablo","apellido":"Quiña","edad":"33","id":1},{"nombre":"Carlos","apellido":"Sánchez","edad":"25","id":2}]}
+{"maxID":2,"data":[{"nombre":"Pablo","apellido":"Quiña","edad":"33","id":1},{"id":2}]}

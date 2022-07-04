@@ -16,7 +16,7 @@ class Api {
                         const contenido = {maxID: maxId, data: data}
                         await fs.promises.writeFile(`./Storage/${this.fileName}`,JSON.stringify(contenido));
                         console.log("El archivo estaba corrupto, se ha creado el archivo de nuevo.")
-                    } 
+                    }
                 })
                 .catch(async (error) => {
                     const data = [];
@@ -24,7 +24,7 @@ class Api {
                     const contenido = {maxID: maxId, data: data}
                     await fs.promises.writeFile(`./Storage/${this.fileName}`,JSON.stringify(contenido));
                     console.log(`Se produjo el error ${error}. Se ha creado el archivo ${this.fileName}.`)
-                });          
+                });
             })();
         }
 
@@ -112,34 +112,29 @@ class Api {
             err.statusCode = 400;
             throw err;
         }
-        try {
-            
-            const contenido =  JSON.parse(await fs.promises.readFile(`./Storage/${this.fileName}`,'utf-8'));
-            //Buscamos si el producto existe    
-            const object = contenido.data.find((obj) => obj.id === id);
 
-            //Si no existe avisamos de esto
-            if (!object) {
-                const err = new Error("El producto no existe");
-                err.statusCode = 404;
-                throw err;
-            }
+        const contenido =  JSON.parse(await fs.promises.readFile(`./Storage/${this.fileName}`,'utf-8'));
+        //Buscamos si el producto existe
+        const object = await contenido.data.find((obj) => obj.id === id);
 
-            //En caso contrario, actualizamos la parte de los datos
-            contenido.data = contenido.data.map((obj) => {
-                if (obj.id === id)
-                    return {...newObject,id};
-                return obj;
-                }
-            );
-
-            //Actualizamos el contenido del archivo
-            await fs.promises.writeFile(`./Storage/${this.fileName}`,JSON.stringify(contenido));
-
-        } catch (error) {
-            console.log(`Error al obtener los elementos: ${error}`);
-            throw (error);
+        //Si no existe avisamos de esto
+        if (!object) {
+            const err = new Error("El producto no existe");
+            err.statusCode = 404;
+            throw err;
         }
+
+        //En caso contrario, actualizamos la parte de los datos
+        contenido.data = await contenido.data.map((obj) => {
+            if (obj.id === id)
+                return {...newObject,id};
+            return obj;
+            }
+        );
+
+        //Actualizamos el contenido del archivo
+        await fs.promises.writeFile(`./Storage/${this.fileName}`,JSON.stringify(contenido));
+
     }
 
     //Método para borrar todos los elementos
@@ -151,7 +146,7 @@ class Api {
     //         contenido.data = [];
     //         await fs.promises.writeFile(`./Storage/${this.fileName}`,JSON.stringify(contenido));
     //         console.log(`Se borraron todos los objetos presentes en el archivo.`);
-            
+
     //     } catch (error) {
     //         console.log(`Error al borrar: ${error}`);
     //     }

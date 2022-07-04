@@ -37,16 +37,42 @@ const addProduct = (req, res) => {
     }
 }
 
+// const updateProduct = (req, res) => {
+//     try {
+//         const id = Number(req.params.id); 
+//         const {nombre, apellido, edad } = req.body;
+//         console.log("Posición 1");
+//         products.updateProduct(id, {nombre, apellido, edad});
+//         console.log("Posición 2");
+//         res.sendStatus(200);
+//     } catch (error) {
+//         // res
+//         //     .status(error.statusCode ? error.statusCode : 500)
+//         //     .json({ error: error.message });
+//         console.log("Posicion 3")
+//     }
+// }
+
 const updateProduct = (req, res) => {
     try {
-        const {id, nombre, apellido, edad } = req.body;
-        console.log(nombre);
-        products.updateProduct(Number(id), {nombre, apellido, edad});
+        const id = Number(req.params.id);
+        const { name, price, thumbnail } = req.body;
+        products.updateProduct(id, {name, price, thumbnail});
         res.sendStatus(200);
+    } catch (error) {
+        res
+            .status(error.statusCode ? error.statusCode : 500)
+            .json({ error: error.message });
+    }
+}
+
+const deleteProduct = (req, res) => {
+    try {
+        const id = Number(req.params.id);
     } catch (error) {
         console.log(`Error: ${error}`);
         res.sendStatus(error.statusCode);
     }
 }
 
-module.exports = {getProduct, getProducts, addProduct, updateProduct};
+module.exports = {getProduct, getProducts, addProduct, updateProduct, deleteProduct};
