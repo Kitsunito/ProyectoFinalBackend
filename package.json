@@ -4,7 +4,7 @@
   "description": "Trabajo Final para el curso de Backend de Coderhouse",
   "main": "index.js",
   "scripts": {
-    "test": "node ./server.js"
+    "start": "nodemon ./server.js"
   },
   "keywords": [
     "Backend",
