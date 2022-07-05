@@ -81,7 +81,7 @@ class Api {
     //Método para borrar un elemento según su ID
     async deleteById(id) {
         try {
-            let contenido =  JSON.parse(await fs.promises.readFile(`./Storage/${fileName}`,'utf-8'));
+            let contenido =  JSON.parse(await fs.promises.readFile(`./Storage/${this.fileName}`,'utf-8'));
             //Validamos que el id esté dentro de uno de los ID posibles para evitar recorrer un array
             //de forma innecesaria
             if (id <= contenido.maxID && id > 0){
@@ -91,7 +91,7 @@ class Api {
                 // y subimos el contenido de nuevo al archivo sin este elemento.
                 if (index !== -1){
                     contenido.data.splice(index,1);
-                    await fs.promises.writeFile(`./Storage/${fileName}`,JSON.stringify(contenido));
+                    await fs.promises.writeFile(`./Storage/${this.fileName}`,JSON.stringify(contenido));
                     console.log(`Se borró el elemento id = ${id} exitosamente.`);
                 } else {
                     console.log(`No se encontró el elemento id = ${id}.`)

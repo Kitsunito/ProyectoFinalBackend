@@ -37,27 +37,11 @@ const addProduct = (req, res) => {
     }
 }
 
-// const updateProduct = (req, res) => {
-//     try {
-//         const id = Number(req.params.id); 
-//         const {nombre, apellido, edad } = req.body;
-//         console.log("Posición 1");
-//         products.updateProduct(id, {nombre, apellido, edad});
-//         console.log("Posición 2");
-//         res.sendStatus(200);
-//     } catch (error) {
-//         // res
-//         //     .status(error.statusCode ? error.statusCode : 500)
-//         //     .json({ error: error.message });
-//         console.log("Posicion 3")
-//     }
-// }
-
 const updateProduct = (req, res) => {
     try {
-        const id = Number(req.params.id);
-        const { name, price, thumbnail } = req.body;
-        products.updateProduct(id, {name, price, thumbnail});
+        const id = Number(req.params.id); 
+        const {nombre, apellido, edad } = req.body;
+        products.updateProduct(id, {nombre, apellido, edad});
         res.sendStatus(200);
     } catch (error) {
         res
