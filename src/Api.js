@@ -104,6 +104,7 @@ class Api {
         }
     }
 
+    //<-------------------------------------- Acá necesito ayuda :S
     //Método para actualizar un producto según el id
     async updateProduct(id, newObject){
         //Validamos que el id sea un número

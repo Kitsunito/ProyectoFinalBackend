@@ -1,6 +1,7 @@
 const ApiProducts = require('../Api');
 const products = new ApiProducts("productos.txt");
 
+//Get para un elemento
 const getProduct = (req, res) => {
     try {
         const id = Number(req.params.id);
@@ -17,6 +18,7 @@ const getProduct = (req, res) => {
     }
 }
 
+//Get para todos los elementos
 const getProducts = (req, res) => {
     try {
         products.getAll().then(result => res.json(result));
@@ -26,6 +28,7 @@ const getProducts = (req, res) => {
     }
 }
 
+//Post
 const addProduct = (req, res) => {
     try {
         const { nombre, apellido, edad } = req.body;
@@ -37,6 +40,7 @@ const addProduct = (req, res) => {
     }
 }
 
+//Put
 const updateProduct = (req, res) => {
     try {
         const id = Number(req.params.id); 
@@ -50,6 +54,7 @@ const updateProduct = (req, res) => {
     }
 }
 
+//Delete
 const deleteProduct = (req, res) => {
     try {
         const id = Number(req.params.id);
