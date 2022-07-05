@@ -33,7 +33,7 @@ const addProduct = (req, res) => {
     try {
         const { nombre, apellido, edad } = req.body;
         products.save({ nombre, apellido, edad })
-        res.sendStatus(201)
+        res.sendStatus(201);
     } catch (error) {
         console.log(`Error: ${error}`);
         res.sendStatus(500);
@@ -58,6 +58,8 @@ const updateProduct = (req, res) => {
 const deleteProduct = (req, res) => {
     try {
         const id = Number(req.params.id);
+        products.deleteById(id);
+        res.sendStatus(204);
     } catch (error) {
         console.log(`Error: ${error}`);
         res.sendStatus(error.statusCode);
