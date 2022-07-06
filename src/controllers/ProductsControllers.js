@@ -45,7 +45,7 @@ const updateProduct = (req, res) => {
     try {
         const id = Number(req.params.id); 
         const {nombre, apellido, edad } = req.body;
-        products.updateProduct(id, {nombre, apellido, edad});
+        products.updateById(id, {nombre, apellido, edad});
         res.sendStatus(200);
     } catch (error) {
         res

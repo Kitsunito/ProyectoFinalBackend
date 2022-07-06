@@ -3,11 +3,11 @@ const app = express();
 const routes = require('./src/routes');
 const port = 8080;
 
+
 //Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api', routes);
-
 
 //Corremos el server escuchando el puerto indicado
 app.listen(port, (error) => {

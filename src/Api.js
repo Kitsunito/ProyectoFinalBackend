@@ -1,4 +1,5 @@
 const fs = require('fs');
+const Product = require('./Clases/Products');
 
 class Api {
     constructor(fileName) {
@@ -106,7 +107,7 @@ class Api {
 
     //<-------------------------------------- Acá necesito ayuda :S
     //Método para actualizar un producto según el id
-    async updateProduct(id, newObject){
+    async updateById(id, newObject){
         //Validamos que el id sea un número
         if (isNaN(id)) {
             const err = new Error("El id debe ser un número");
