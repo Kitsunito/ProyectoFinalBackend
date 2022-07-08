@@ -1,14 +1,19 @@
 const ApiProducts = require('../Api');
 const carts = new ApiProducts("carritos.txt");
 const products = new ApiProducts("productos.txt");
+const Cart = require('../clases/Cart')
+const Product = require('../clases/Product');
 
 //POST: '/' - Crea un carrito y devuelve su id.
 const newCart = (req, res) => {
     try {
-        const {producto} = req.body;
-        carts.save({producto})
+        const newCart = new Cart({id: -1, products: []});
+        carts.save({timestamp: newCart.timestamp, products: newCart.products})
             .then(result => {
-                res.json(result);
+                if (!result)
+                    res.sendStatus(404);
+                else
+                    res.status(201).json(result);
             });
     } catch (error) {
         console.log(`Error: ${error}`);
@@ -36,8 +41,16 @@ const showProducts = (req, res) => {
             .then( result => {
                 if (!result.products)
                     res.sendStatus(404);
-                else
-                    res.json(result.products)
+                else {
+                    const products = [];
+                    result.products.map(product => {
+                        if (product) {
+                            const prod = new Product(product);
+                            products.push(prod);
+                        }
+                    })
+                    res.status(200).json(products);
+                }
             });
     } catch (error) {
         console.log(`Error: ${error}`);
@@ -56,19 +69,17 @@ const  addProductToCart = (req, res) => {
             .then( result => {
                 //Buscamos el producto
                 products.getById(id_prod)
-                            .then(product => {
-                                console.log(product);
-                                //Si lo encontramos guardamos el producto en la variable
-                                if (product) {
-                                    result.products.push(product);
-                                    carts.updateById(result.id, {products: result.products})
-                                        .then(res.sendStatus(201));
-                                } else
-                                //Si no, devolvemos el status 404;
-                                    res.sendStatus(404);
-                            });
-                
-                
+                        .then(product => {
+                            //Si lo encontramos guardamos el producto en la variable
+                            if (product) {
+                                const prod = new Product(product);
+                                result.products.push(prod);
+                                carts.updateById(result.id, {products: result.products})
+                                    .then(res.sendStatus(201));
+                            } else
+                            //Si no, devolvemos el status 404;
+                                res.sendStatus(404);
+                        });
                 });
     } catch (error) {
         console.log(`Error: ${error}`);

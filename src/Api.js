@@ -1,5 +1,5 @@
 const fs = require('fs');
-const Product = require('./Clases/Products');
+const Product = require('./clases/Product');
 
 class Api {
     constructor(fileName) {
