@@ -39,8 +39,7 @@ const getProducts = (req, res) => {
 const addProduct = (req, res) => {
     try {
         //Insanciamos un Producto con un id ficticio
-        const {nombre, descripcion, codigo, foto, precio, stock} = req.body
-        const newProduct = new Product(-1, nombre, descripcion, codigo, foto, precio, stock);
+        const newProduct = new Product(-1, new Date, req.body.nombre, req.body.descripcion, req.body.codigo, req.body.foto, req.body.precio, req.body.stock);
         //Validamos que sea un objeto producto y, en ese caso, guardamos el producto
         if (newProduct.validateData()) {
             products.save(newProduct).then(result => {

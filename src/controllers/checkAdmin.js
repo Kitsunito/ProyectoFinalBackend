@@ -1,6 +1,6 @@
 //Variable para simular un usuario
 const user = {
-    admin: false
+    admin: true
 }
 
 const checkAdmin = (req, res, next) => {

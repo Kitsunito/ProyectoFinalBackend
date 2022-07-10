@@ -1,7 +1,7 @@
 class Producto {
-    constructor({id, nombre, timestamp, descripcion, codigo, foto, precio, stock}){
+    constructor(id, nombre, timestamp, descripcion, codigo, foto, precio, stock){
         this.id = id;
-        this.timestamp = timestamp ? timestamp : new Date();
+        this.timestamp = timestamp;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.codigo = codigo;
