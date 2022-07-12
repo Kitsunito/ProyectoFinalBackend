@@ -1,3 +1,4 @@
+const { json } = require('express');
 const ApiProducts = require('../Api');
 const carts = new ApiProducts("carritos.txt");
 const products = new ApiProducts("productos.txt");
@@ -39,13 +40,14 @@ const showProducts = (req, res) => {
         const id = Number(req.params.id);
         carts.getById(id)
             .then( result => {
-                if (!result.products)
+                if (!result || !result.products)
                     res.sendStatus(404);
                 else {
                     const products = [];
                     result.products.map(product => {
                         if (product) {
-                            const prod = new Product(product);
+                            const prod = new Product(product.id, product.timestamp, product.nombre, product.descripcion,
+                                product.codigo, product.foto, product.precio, product.stock);
                             products.push(prod);
                         }
                     })
@@ -68,18 +70,29 @@ const  addProductToCart = (req, res) => {
         carts.getById(id)
             .then( result => {
                 //Buscamos el producto
-                products.getById(id_prod)
+                if (result) {
+                    products.getById(id_prod)
                         .then(product => {
+                            console.log(result);
+                            console.log(product);
                             //Si lo encontramos guardamos el producto en la variable
                             if (product) {
-                                const prod = new Product(product);
+                                const prod = new Product(product.id, product.timestamp, product.nombre, product.descripcion,
+                                    product.codigo, product.foto, product.precio, product.stock);
                                 result.products.push(prod);
-                                carts.updateById(result.id, {products: result.products})
+                                const updatedCart = {
+                                    timestamp: result.timestamp,
+                                    products: result.products
+                                }
+                                carts.updateById(result.id, updatedCart)
                                     .then(res.sendStatus(201));
                             } else
                             //Si no, devolvemos el status 404;
                                 res.sendStatus(404);
                         });
+                } else {
+                    res.sendStatus(404);
+                }
                 });
     } catch (error) {
         console.log(`Error: ${error}`);
@@ -96,7 +109,7 @@ const deleteProductFromCart = (req, res) => {
         carts.getById(id)
             .then(result => {
                 //Si no lo encuentra o no tiene productos, devolvemos el error 404
-                if (!result.products)
+                if (!result)
                     res.sendStatus(404);
                 else {
                     //Si lo encuentra, buscamos el index del mismo
