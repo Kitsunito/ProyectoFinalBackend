@@ -1,4 +1,4 @@
-const { json } = require('express');
+import {json} from 'express';
 const ApiProducts = require('../Api');
 const carts = new ApiProducts("carritos.txt");
 const products = new ApiProducts("productos.txt");

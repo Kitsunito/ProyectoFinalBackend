@@ -1,6 +1,6 @@
-const express = require('express');
+import express from 'express';
 const app = express();
-const routes = require('./src/routes');
+import routes from './src/routes'
 const PORT = process.env.PORT || 8080;
 
 

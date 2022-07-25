@@ -138,20 +138,6 @@ class Api {
 
     }
 
-    //Método para borrar todos los elementos
-    //Dado que la consigna no lo especifica, en este caso se toma que el borrar todos los elementos
-    //no implica reiniciar la base de datos, por lo que el id máximo generado se mantendrá.
-    // async deteleAll() {
-    //     try {
-    //         let contenido =  JSON.parse(await fs.promises.readFile(`./Storage/${this.fileName}`,'utf-8'));
-    //         contenido.data = [];
-    //         await fs.promises.writeFile(`./Storage/${this.fileName}`,JSON.stringify(contenido));
-    //         console.log(`Se borraron todos los objetos presentes en el archivo.`);
-
-    //     } catch (error) {
-    //         console.log(`Error al borrar: ${error}`);
-    //     }
-    // }
 }
 
 module.exports = Api;

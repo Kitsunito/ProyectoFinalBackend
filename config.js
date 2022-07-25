@@ -1,0 +1,5 @@
+config = () => {
+
+}
+
+export default config;

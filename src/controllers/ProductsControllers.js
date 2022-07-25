@@ -1,7 +1,8 @@
-const ApiProducts = require('../Api');
+//const ApiProducts = require('../Api');
+// const products = new ApiProducts("productos.txt");
+// const Product = require('../clases/Product');
 
-const products = new ApiProducts("productos.txt");
-const Product = require('../clases/Product');
+import ProductDaoMongo from "../containers/daos/products/ProductDaoMongo";
 
 //GET de un producto
 const getProduct = (req, res) => {
