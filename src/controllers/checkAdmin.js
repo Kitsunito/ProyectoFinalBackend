@@ -10,4 +10,4 @@ const checkAdmin = (req, res, next) => {
         res.status(403).json({ Error: `Permisos insuficientes para la ruta ${req.originalUrl} y el método ${req.method}.`});
 }
 
-module.exports = checkAdmin
+export default checkAdmin;

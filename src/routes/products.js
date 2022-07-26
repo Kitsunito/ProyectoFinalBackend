@@ -1,6 +1,6 @@
 import { Router } from 'express';
-const {getProduct, getProducts, addProduct, updateProduct, deleteProduct} = require('../controllers/ProductsControllers');
-const checkAdmin = require('../controllers/checkAdmin');
+import {getProduct, getProducts, addProduct, updateProduct, deleteProduct} from '../controllers/ProductsControllers.js';
+import checkAdmin from '../controllers/checkAdmin.js';
 
 const router = Router();
 /*----------Rutas----------*/

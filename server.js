@@ -1,6 +1,6 @@
 import express from 'express';
 const app = express();
-import routes from './src/routes'
+import routes from './src/routes/index.js'
 const PORT = process.env.PORT || 8080;
 
 
@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api', routes);
 app.use('/*', (req, res) => {
     res.status(404).json({ Error: `La ruta ${req.originalUrl} no está definida para el método ${req.method}.`});
-});
+}); 
 
 //Corremos el server escuchando el puerto indicado
 app.listen(PORT, (error) => {

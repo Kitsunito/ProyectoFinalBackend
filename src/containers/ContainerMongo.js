@@ -1,5 +1,7 @@
-import config from "../../config";
+import config from "../../config.js";
 import mongoose from 'mongoose';
+
+await mongoose.connect(config.mongodb.connectionString);
 
 class ContainerMongo{
     constructor(collectionName, schema) {
