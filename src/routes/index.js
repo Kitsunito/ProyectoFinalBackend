@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import products from './products.js';
+import cart from './cart.js'
 const router = Router();
-
-const cart = require('./cart');
 
 //Derivamos todas las rutas dede la raíz productos al archivo products;
 router.use('/productos', products);

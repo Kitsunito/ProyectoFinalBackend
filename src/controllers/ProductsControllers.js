@@ -7,8 +7,8 @@ import ProductDaoMongo from "../containers/daos/products/ProductDaoMongo.js";
 //GET de un producto
 const getProduct = (req, res) => {
     try {
-        const id = Number(req.params.id);
-        ProductDaoMongo.getById(id)
+        const productDao = new ProductDaoMongo();
+        productDao.getById(req.params.id)
             .then( result => {
                 if (!result){
                     res.sendStatus(404);
@@ -85,4 +85,6 @@ const getProduct = (req, res) => {
 //     }
 // }
 
-module.exports = {getProduct/*, getProducts, addProduct, updateProduct, deleteProduct*/};
+/*, getProducts, addProduct, updateProduct, deleteProduct*/
+
+export {getProduct};
