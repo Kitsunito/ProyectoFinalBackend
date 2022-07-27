@@ -1,15 +1,15 @@
 import { Router } from 'express';
-import {ProductDao} from '../containers/daos/index.js'
+import { getProduct, getProducts, addProduct } from '../controllers/ProductsControllers.js';
 import checkAdmin from '../controllers/checkAdmin.js';
 
 const router = Router();
 /*----------Rutas----------*/
 // GET: '/:id?' - Me permite listar todos los productos disponibles ó un producto por su id (disponible para usuarios y administradores)
-router.get('/:id', ProductDao.getById);
-router.get('/', ProductDao.getAll);
+router.get('/:id', getProduct);
+router.get('/', getProducts);
 
 // // POST: '/' - Para incorporar productos al listado (disponible para administradores)
-router.post('/', checkAdmin, ProductDao.save);
+router.post('/', checkAdmin, addProduct);
 
 // // PUT: '/:id' - Actualiza un producto por su id (disponible para administradores)
 // router.put('/:id', checkAdmin, updateProduct);
