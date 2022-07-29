@@ -10,21 +10,15 @@ class ContainerMongo{
 
     //GET de un documento
     async getById(id) {
-        try {
-            const mongooseId = mongoose.Types.ObjectId(id);
-            console.log(mongooseId);
-        } catch (error) {
-            console.log(error);
-        }
-        await this.collection.findById(id);
-        // const doc = await this.collection.find({'_id': id}, {__V: 0});
-        // if (!doc) {
-        //     const error = new Error('El producto no existe');
-        //     error.statusCode = 404;
-        //     throw error;
-        // }
+        const product  = await this.collection.findById(id);
 
-        //return doc;
+        if (!product) {
+            const error = new Error('El producto no existe');
+            error.statusCode = 404;
+            throw error;
+        }
+
+        return product;
     }
 
     //GET de todos los documentos
@@ -40,12 +34,27 @@ class ContainerMongo{
 
     //POST
     async save(object) {
-        try {
             const product =  await this.collection.insertMany(object);
+            if (!product) {
+                const error = new Error('Error al guardar el producto');
+                throw error;
+            }
             return product;
-        } catch (error) {
-            console.log(`Error al guardar: ${error}`);
+    }
+
+    async updateById(id, object){
+        const product = await this.collection.findOneAndUpdate({'_id': id}, object)
+        if (!product) {
+            const error = new Error('Error al actualizar el producto');
+            throw error;
         }
+        return product;
+    }
+
+
+    async deleteById(id){
+        await this.collection.findByIdAndDelete({'_id': id});
+        return `Se eliminó el elemento ${id} OK`;
     }
 }
 

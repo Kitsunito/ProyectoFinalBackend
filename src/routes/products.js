@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getProduct, getProducts, addProduct } from '../controllers/ProductsControllers.js';
+import { getProduct, getProducts, addProduct, updateProduct, deleteProduct } from '../controllers/ProductsControllers.js';
 import checkAdmin from '../controllers/checkAdmin.js';
 
 const router = Router();
@@ -12,9 +12,9 @@ router.get('/', getProducts);
 router.post('/', checkAdmin, addProduct);
 
 // // PUT: '/:id' - Actualiza un producto por su id (disponible para administradores)
-// router.put('/:id', checkAdmin, updateProduct);
+router.put('/:id', checkAdmin, updateProduct);
 
 // // DELETE: '/:id' - Borra un producto por su id (disponible para administradores)
-// router.delete('/:id', checkAdmin, deleteProduct);
+router.delete('/:id', checkAdmin, deleteProduct);
 
 export default router;
