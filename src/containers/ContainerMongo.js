@@ -10,48 +10,49 @@ class ContainerMongo{
 
     //GET de un documento
     async getById(id) {
-        const product  = await this.collection.findById(id);
-
-        if (!product) {
+        const document  = await this.collection.findById(id);
+        console.log(`Error: ${document}`)
+        if (!document) {
             const error = new Error('El documento no existe');
             error.statusCode = 404;
             throw error;
         }
 
-        return product;
+        return document;
     }
 
     //GET de todos los documentos
     async getAll(){
-        const products = await this.collection.find();
-        if (!products) {
+        const documents = await this.collection.find();
+        if (!documents) {
             const error = new Error('Error al obtener la colección');
             error.statusCode=404;
             throw error;
         }
-        return products;
+        return documents;
     }
 
     //POST
     async save(object) {
-            const product =  await this.collection.insertMany(object);
-            if (!product) {
+            const document =  await this.collection.insertMany(object);
+            if (!document) {
                 const error = new Error('Error al guardar el documento');
                 throw error;
             }
-            return product;
+            return document;
     }
 
+    //PUT
     async updateById(id, object){
-        const product = await this.collection.findOneAndUpdate({'_id': id}, object)
-        if (!product) {
+        const document = await this.collection.findOneAndUpdate({'_id': id}, object)
+        if (!document) {
             const error = new Error('Error al actualizar el documento');
             throw error;
         }
-        return product;
+        return document;
     }
 
-
+    //DELETE
     async deleteById(id){
         await this.collection.findByIdAndDelete({'_id': id});
         return `Se eliminó el documento ${id} OK`;
