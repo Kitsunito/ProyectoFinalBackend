@@ -1,10 +1,8 @@
-//const ApiProducts = require('../Api');
-// const products = new ApiProducts("productos.txt");
-// const Product = require('../clases/Product');
 import { ProductDao } from "../containers/daos/index.js";
 
 //GET de un producto
 const getProduct = (req, res) => {
+    try {
         ProductDao.getById(req.params.id)
             .then( result => {
                 if (!result){
@@ -15,6 +13,12 @@ const getProduct = (req, res) => {
             .catch(error => {
                 console.warn(`${error}`);
                 res.sendStatus(error.statusCode ? error.statusCode : 500)});
+            } catch (error) {
+                console.log(`Error: ${error}`);
+                res
+                    .status(error.statusCode ? error.statusCode : 500)
+                    .json({Error: error.message});
+            }
 }
 
 //GET de todos los productos
@@ -74,7 +78,7 @@ const deleteProduct = (req, res) => {
                 res
                     .status(500)
                     .json({Error: error.message});
-            })
+            });
     } catch (error) {
         console.log(`Error: ${error}`);
         res.sendStatus(error.statusCode);

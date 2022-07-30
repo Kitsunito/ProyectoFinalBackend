@@ -13,7 +13,7 @@ class ContainerMongo{
         const product  = await this.collection.findById(id);
 
         if (!product) {
-            const error = new Error('El producto no existe');
+            const error = new Error('El documento no existe');
             error.statusCode = 404;
             throw error;
         }
@@ -36,7 +36,7 @@ class ContainerMongo{
     async save(object) {
             const product =  await this.collection.insertMany(object);
             if (!product) {
-                const error = new Error('Error al guardar el producto');
+                const error = new Error('Error al guardar el documento');
                 throw error;
             }
             return product;
@@ -45,7 +45,7 @@ class ContainerMongo{
     async updateById(id, object){
         const product = await this.collection.findOneAndUpdate({'_id': id}, object)
         if (!product) {
-            const error = new Error('Error al actualizar el producto');
+            const error = new Error('Error al actualizar el documento');
             throw error;
         }
         return product;
@@ -54,7 +54,7 @@ class ContainerMongo{
 
     async deleteById(id){
         await this.collection.findByIdAndDelete({'_id': id});
-        return `Se eliminó el elemento ${id} OK`;
+        return `Se eliminó el documento ${id} OK`;
     }
 }
 

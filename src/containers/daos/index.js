@@ -4,10 +4,10 @@ let CartDao;
 switch (process.env.DATABASETYPE) {
     case 'mongo':
         const { default: ProductDaoMongo} = await import('./products/ProductDaoMongo.js');
-        //const { default: CartDaoMongo } = await import('./carts/CartDaoMongo');
+        const { default: CartDaoMongo } = await import('./carts/CartDaoMongo.js');
 
         ProductDao = new ProductDaoMongo();
-        //CartDao = new CartDaoMongo();
+        CartDao = new CartDaoMongo();
         
         break;
 

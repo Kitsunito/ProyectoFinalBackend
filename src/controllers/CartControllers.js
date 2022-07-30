@@ -1,35 +1,41 @@
-import {json} from 'express';
-const ApiProducts = require('../Api');
-const carts = new ApiProducts("carritos.txt");
-const products = new ApiProducts("productos.txt");
-const Cart = require('../clases/Cart')
-const Product = require('../clases/Product');
+import { ProductDao, CartDao } from "../containers/daos/index.js";
+import { mongoose } from "mongoose";
 
 //POST: '/' - Crea un carrito y devuelve su id.
 const newCart = (req, res) => {
     try {
-        const newCart = new Cart({id: -1, products: []});
-        carts.save({timestamp: newCart.timestamp, products: newCart.products})
+        const products = [];
+        CartDao.save({timestamp: new Date, products})
             .then(result => {
                 if (!result)
                     res.sendStatus(404);
                 else
-                    res.status(201).json(result);
+                    res.status(201).json(result)})
+            .catch(error => {
+                res
+                    .status(500)
+                    .json({Error: error.message});
             });
     } catch (error) {
-        console.log(`Error: ${error}`);
-        res.sendStatus(500);
+        console.log(`${error}`);
+        res
+            .status(res.statusCode ? res.statusCode : 500)
+            .json({error});
     }
 }
 
 //DELETE: '/:id' - Vacía un carrito y lo elimina.
-const emptyCart = (req, res) => {
+const deleteCart = (req, res) => {
     try {
-        const id = Number(req.params.id);
-        carts.deleteById(id)
-            .then(res.sendStatus(204));
+        CartDao.deleteById(req.params.id)
+            .then(res.sendStatus(204))
+            .catch(error => {
+                res
+                    .status(500)
+                    .json({Error: error.message});
+            });
     } catch (error) {
-        console.log(`Error: ${error}`);
+        console.log(`${error}`);
         res.sendStatus(error.statusCode);
     }
 }
@@ -37,22 +43,16 @@ const emptyCart = (req, res) => {
 //GET: '/:id/productos' - Me permite listar todos los productos guardados en el carrito
 const showProducts = (req, res) => {
     try {
-        const id = Number(req.params.id);
-        carts.getById(id)
+        CartDao.getById(req.params.id)
             .then( result => {
                 if (!result || !result.products)
                     res.sendStatus(404);
-                else {
-                    const products = [];
-                    result.products.map(product => {
-                        if (product) {
-                            const prod = new Product(product.id, product.timestamp, product.nombre, product.descripcion,
-                                product.codigo, product.foto, product.precio, product.stock);
-                            products.push(prod);
-                        }
-                    })
-                    res.status(200).json(products);
-                }
+                res.status(200).json(result.products);
+                })
+            .catch(error => {
+                res
+                    .status(500)
+                    .json({Error: error.message});
             });
     } catch (error) {
         console.log(`Error: ${error}`);
@@ -60,40 +60,44 @@ const showProducts = (req, res) => {
     }
 }
 
-// POST: '/:id/productos' - Para incorporar productos al carrito por su id de producto
+// POST: '/:id/productos/:id_prod' - Para incorporar productos al carrito por su id de producto
 const  addProductToCart = (req, res) => {
     try {
-        const id = Number(req.params.id);
-        const id_prod = Number(req.params.id_prod);
+        const id = req.params.id;
+        const id_prod = req.params.id_prod;
 
         //Buscamos el carrito
-        carts.getById(id)
+        CartDao.getById(id)
             .then( result => {
                 //Buscamos el producto
                 if (result) {
-                    products.getById(id_prod)
+                    ProductDao.getById(id_prod)
                         .then(product => {
                             console.log(result);
                             console.log(product);
                             //Si lo encontramos guardamos el producto en la variable
                             if (product) {
-                                const prod = new Product(product.id, product.timestamp, product.nombre, product.descripcion,
-                                    product.codigo, product.foto, product.precio, product.stock);
-                                result.products.push(prod);
+                                result.products.push(product);
                                 const updatedCart = {
                                     timestamp: result.timestamp,
                                     products: result.products
                                 }
-                                carts.updateById(result.id, updatedCart)
+                                CartDao.updateById(result.id, updatedCart)
                                     .then(res.sendStatus(201));
                             } else
                             //Si no, devolvemos el status 404;
                                 res.sendStatus(404);
-                        });
+                        })
+                        .catch();
                 } else {
                     res.sendStatus(404);
                 }
-                });
+                })
+            .catch(error => {
+                res
+                    .status(500)
+                    .json({Error: error.message});
+            });
     } catch (error) {
         console.log(`Error: ${error}`);
         res.sendStatus(500);
@@ -102,27 +106,33 @@ const  addProductToCart = (req, res) => {
 // DELETE: '/:id/productos/:id_prod' - Eliminar un producto del carrito por su id de carrito y de producto
 const deleteProductFromCart = (req, res) => {
     try {
-        const id = Number(req.params.id);
-        const id_prod = Number(req.params.id_prod);
-        
+        const id = req.params.id;
+        const id_prod = req.params.id_prod;
+
         //Buscamos el carrito
-        carts.getById(id)
+        CartDao.getById(id)
             .then(result => {
                 //Si no lo encuentra o no tiene productos, devolvemos el error 404
                 if (!result)
                     res.sendStatus(404);
                 else {
                     //Si lo encuentra, buscamos el index del mismo
-                    const index = result.products.findIndex(product => product.id === id_prod);
-                    //Si encuentra un ínidce, lo eliminamos del array y actualizamos el carrito sin el producto
+                    const products = result.products;
+                    const index = products.findIndex(product => product._id == id_prod);
+                    // Si encuentra un ínidce, lo eliminamos del array y actualizamos el carrito sin el producto
                     if (index !== -1) {
                         result.products.splice(index,1);
-                        carts.updateById(result.id, {products: result.products})
+                        CartDao.updateById(result.id, {products: result.products})
                             .then(res.sendStatus(204));
                     //En caso contrario, devolvemos el status 404
                     } else
                         res.sendStatus(404);
                 }
+            })
+            .catch(error => {
+                res
+                    .status(500)
+                    .json({Error: error.message});
             });
     } catch (error) {
         console.log(`Error: ${error}`);
@@ -130,4 +140,4 @@ const deleteProductFromCart = (req, res) => {
     }
 }
 
-module.exports = {newCart, emptyCart, showProducts, addProductToCart, deleteProductFromCart}
+export {newCart, deleteCart, showProducts, addProductToCart, deleteProductFromCart}
