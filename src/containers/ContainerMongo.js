@@ -11,7 +11,6 @@ class ContainerMongo{
     //GET de un documento
     async getById(id) {
         const document  = await this.collection.findById(id);
-        console.log(`Error: ${document}`)
         if (!document) {
             const error = new Error('El documento no existe');
             error.statusCode = 404;

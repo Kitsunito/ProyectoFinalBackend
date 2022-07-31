@@ -55,7 +55,7 @@ const updateProduct = (req, res) => {
     try {
         const {name, description, code, thumbnail, price, stock} = req.body;
         ProductDao.updateById(req.params.id, {name, description, code, thumbnail, price, stock})
-            .then(result => {res.status(200).json(`Producto ${result.id} actualizado OK.`)})
+            .then(result => {res.status(200).json(`Producto ${req.params.id} actualizado OK.`)})
             .catch(error => {
                 console.log(`Error: ${error}`);
                 res

@@ -12,6 +12,12 @@ switch (process.env.DATABASETYPE) {
         break;
 
     case 'firebase':
+        const { default: ProductDaoFB} = await import('./products/ProductDaoFB.js');
+        // const { default: CartDaoMongo } = await import('./carts/CartDaoMongo.js');
+
+        ProductDao = new ProductDaoFB();
+        // CartDao = new CartDaoMongo();
+
         break;
     default:
         break;
