@@ -1,11 +1,13 @@
 import config from '../../config.js';
 import admin from 'firebase-admin';
+import { initializeApp, getApps } from 'firebase-admin/app';
 
-admin.initializeApp({
-    credential: admin.credential.cert(config.firebase)
-});
+if (!getApps().length){
+    initializeApp({credential: admin.credential.cert(config.firebase)});
+    admin.firestore().settings({ignoreUndefinedProperties:true});
+}
+
 const db = admin.firestore();
-db.settings({ ignoreUndefinedProperties: true })
 
 class ContainerFirebase {
     constructor(collectionName){

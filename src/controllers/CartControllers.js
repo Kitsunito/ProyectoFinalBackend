@@ -1,5 +1,4 @@
 import { ProductDao, CartDao } from "../containers/daos/index.js";
-import { mongoose } from "mongoose";
 
 //POST: '/' - Crea un carrito y devuelve su id.
 const newCart = (req, res) => {
@@ -73,8 +72,6 @@ const  addProductToCart = (req, res) => {
                 if (result) {
                     ProductDao.getById(id_prod)
                         .then(product => {
-                            console.log(result);
-                            console.log(product);
                             //Si lo encontramos guardamos el producto en la variable
                             if (product) {
                                 result.products.push(product);
@@ -82,7 +79,7 @@ const  addProductToCart = (req, res) => {
                                     timestamp: result.timestamp,
                                     products: result.products
                                 }
-                                CartDao.updateById(result.id, updatedCart)
+                                CartDao.updateById(id, updatedCart)
                                     .then(res.sendStatus(201));
                             } else
                             //Si no, devolvemos el status 404;
@@ -122,7 +119,7 @@ const deleteProductFromCart = (req, res) => {
                     // Si encuentra un ínidce, lo eliminamos del array y actualizamos el carrito sin el producto
                     if (index !== -1) {
                         result.products.splice(index,1);
-                        CartDao.updateById(result.id, {products: result.products})
+                        CartDao.updateById(id, {products: result.products})
                             .then(res.sendStatus(204));
                     //En caso contrario, devolvemos el status 404
                     } else

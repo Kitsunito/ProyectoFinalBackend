@@ -1,5 +1,4 @@
 import 'dotenv/config';
-//const {firebaseKey} = JSON.parse(process.env.FIREBASE_PRIVATE_KEY);
 
 export default {
     mongodb: {

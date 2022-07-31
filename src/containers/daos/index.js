@@ -8,16 +8,14 @@ switch (process.env.DATABASETYPE) {
 
         ProductDao = new ProductDaoMongo();
         CartDao = new CartDaoMongo();
-        
         break;
 
     case 'firebase':
         const { default: ProductDaoFB} = await import('./products/ProductDaoFB.js');
-        // const { default: CartDaoMongo } = await import('./carts/CartDaoMongo.js');
+        const { default: CartDaoFB } = await import('./carts/CartDaoFB.js');
 
         ProductDao = new ProductDaoFB();
-        // CartDao = new CartDaoMongo();
-
+        CartDao = new CartDaoFB();
         break;
     default:
         break;
